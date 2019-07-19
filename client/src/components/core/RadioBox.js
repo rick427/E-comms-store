@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 
-const RadioBox = ({prices}) => {
+const RadioBox = ({prices, handleFilter}) => {
     const [price, setPrices] = useState(0);
 
-    const handleChange = () => {
-        console.log('handleChange')
+    const handleChange = e => {
+       handleFilter(e.target.value);
+       setPrices(e.target.value);
     }
 
     return prices.map((p, i) => (
@@ -14,6 +15,7 @@ const RadioBox = ({prices}) => {
                className="mr-2 ml-4"
                value={`${p._id}`}
                onChange={handleChange} 
+               name="price"
             />
             <label className="form-check-label">{p.name}</label>   
         </div>
