@@ -1,20 +1,24 @@
 import React, {useState, useEffect} from 'react'
 
-const Checkbox = ({categories}) => {
+const Checkbox = ({categories, handleFilter}) => {
+
     const [checked, setChecked] = useState([]);
 
     const handleToggle = category => () => {
         //return first index or -1
       const currentcatId = checked.indexOf(category);
       const newcheckedCatId = [...checked];
+      //if currently checked isnt in the checked array, push
+      //else pull out
       if(currentcatId === -1){
           newcheckedCatId.push(category)
       }
       else{
           newcheckedCatId.splice(currentcatId, 1)
       }
-      console.log(newcheckedCatId);
+      //console.log(newcheckedCatId);
       setChecked(newcheckedCatId);
+      handleFilter(newcheckedCatId);
     }
 
     return categories.map((category, index) => (
