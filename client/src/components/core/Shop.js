@@ -3,6 +3,7 @@ import Layout from './Layout';
 import {getCategories} from '../../context/auth/core';
 import Card from './Card';
 import Checkbox from './Checkbox';
+import {prices} from './FiexedPrices';
 
 const Shop = () => {
     const [categories, setCategories] = useState([]);
