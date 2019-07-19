@@ -7,6 +7,9 @@ import Checkbox from './Checkbox';
 const Shop = () => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
+    const [myFilters, setMyFilters] = useState({
+        filters: {category: [], price: []}
+    })
 
     const init = () => {
         getCategories().then(data => {
@@ -24,7 +27,10 @@ const Shop = () => {
     }, [])
 
     const handleFilter = (filters, filterBy) => {
-        console.log('SHOP', filters, filterBy)
+        //console.log('SHOP', filters, filterBy)
+        const newFilters = {...myFilters};
+        newFilters.filters[filterBy] = filters;
+        setMyFilters(newFilters);
     };
 
     return (
@@ -44,7 +50,7 @@ const Shop = () => {
                    </ul>
                 </div>
                 <div className="col-8">
-                    right Sidebar
+                    {JSON.stringify(myFilters)}
                 </div>
             </div>
         </Layout>
