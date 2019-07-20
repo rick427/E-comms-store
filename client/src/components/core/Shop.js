@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Layout from './Layout';
-import {getCategories} from '../../context/auth/core';
+import {getCategories, getFilteredProducts} from '../../context/auth/core';
 import Card from './Card';
 import Checkbox from './Checkbox';
 import {prices} from './FixedPrices';
@@ -9,6 +9,7 @@ import RadioBox from './RadioBox';
 const Shop = () => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
+    const [limit, setLimit] = useState(6);
     const [myFilters, setMyFilters] = useState({
         filters: {category: [], price: []}
     })
