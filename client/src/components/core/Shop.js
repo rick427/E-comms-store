@@ -10,6 +10,9 @@ const Shop = () => {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
     const [limit, setLimit] = useState(6);
+    const [skip, setSkip] = useState(0);
+    const [size, setSize] = useState(0);
+    const [filterRes, setFilterRes] = useState([]);
     const [myFilters, setMyFilters] = useState({
         filters: {category: [], price: []}
     })
@@ -26,8 +29,50 @@ const Shop = () => {
     }
 
     useEffect(() => {
-        init()
-    }, [])
+        init();
+        loadFilterResults(skip, limit, myFilters.filters)
+        //eslint-disable-next-line
+    }, []);
+
+
+    const loadFilterResults = newFilters => {
+        //console.log(newFilters)
+        getFilteredProducts(skip, limit, newFilters).then(res => {
+            if(res.error){
+                setError(res.error)
+            }
+            else{
+                setFilterRes(res.data);
+                setSize(res.size);
+                setSkip(0);
+            }
+        })
+      }
+    
+      const loadMore = () => {
+          let toSkip = skip + limit;
+          getFilteredProducts(toSkip, limit, myFilters.filters).then(res => {
+              if(res.data){
+                  setError(res.error)
+              }
+              else{
+                  setFilterRes([...filterRes, ...res.data]);
+                  setSize(res.size);
+                  setSkip(toSkip);
+              }
+          }) 
+      }
+
+      const loadMoreButton = () => {
+          return (
+              size > 0 && size >= limit && (
+                  <button onClick={loadMore} className="btn btn-warning mb-5">
+                      Load MORE
+                  </button>
+              )
+          )
+      }
+  
 
     const handleFilter = (filters, filterBy) => {
         //console.log('SHOP', filters, filterBy)
@@ -39,13 +84,9 @@ const Shop = () => {
             newFilters.filters[filterBy] = priceValue;
         }
 
-        loadFilterRwsults(myFilters.filters);
+        loadFilterResults(myFilters.filters);
         setMyFilters(newFilters);
     };
-
-    const loadFilterRwsults = newFilters => {
-      console.log(newFilters)
-    }
 
     const handlePrice = value => {
         const data = prices;
@@ -81,8 +122,16 @@ const Shop = () => {
                         />
                    </div>
                 </div>
+
                 <div className="col-8">
-                    {JSON.stringify(myFilters)}
+                    <h2 className="mb-3">Products</h2>
+                    <div className="row">
+                      {filterRes.map(product => (
+                          <Card product={product}/>
+                      ))}
+                    </div>
+                    <hr/>
+                    {loadMoreButton()}
                 </div>
             </div>
         </Layout>
